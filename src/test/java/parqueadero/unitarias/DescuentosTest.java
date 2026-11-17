@@ -51,4 +51,13 @@ class DescuentosTest {
 
         assertEquals("El valor no puede ser negativo", error.getMessage());
     }
+
+    @Test
+    @DisplayName("Rechaza un tipo de cliente desconocido")
+    void rechazaUnTipoDeClienteDesconocido() {
+        IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
+                () -> descuentos.aplicarDescuento(3000, "vip"));
+
+        assertEquals("Tipo de cliente no válido", error.getMessage());
+    }
 }
