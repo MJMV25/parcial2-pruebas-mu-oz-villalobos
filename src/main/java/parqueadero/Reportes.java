@@ -1,37 +1,37 @@
 package parqueadero;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/** Reportes de las estadías registradas en el parqueadero. */
 public class Reportes {
 
-    static final int tarifaCarro = 3000;
+    private static final String CARRO = "carro";
+    private static final String MOTO = "moto";
+    private static final String TOTAL_RECAUDADO = "total_recaudado";
 
+    private final CalculadoraTarifas calculadora = new CalculadoraTarifas();
+
+    /**
+     * Resume las estadías del día: cuántos carros y cuántas motos entraron
+     * y cuánto se recaudó en total. Cada cobro lo calcula la calculadora de tarifas.
+     */
     public Map<String, Integer> resumen(List<Registro> registros) {
-        Map<String, Integer> r = new HashMap<>();
-        r.put("carro", 0);
-        r.put("moto", 0);
-        r.put("total_recaudado", 0);
-        int temporal = 0;
-        for (Registro reg : registros) {
-            if (reg.tipo().equals("carro")) {
-                r.put("carro", r.get("carro") + 1);
-                if (reg.minutos() > 15) {
-                    int v = (int) Math.ceil(reg.minutos() / 60.0) * tarifaCarro;
-                    if (v > 25000) v = 25000;
-                    r.put("total_recaudado", r.get("total_recaudado") + v);
-                }
-            } else if (reg.tipo().equals("moto")) {
-                r.put("moto", r.get("moto") + 1);
-                if (reg.minutos() > 15) {
-                    int v = (int) Math.ceil(reg.minutos() / 60.0) * 1500;
-                    if (v > 12000) v = 12000;
-                    r.put("total_recaudado", r.get("total_recaudado") + v);
-                }
-            }
-        }
-        return r;
+        return Map.of(
+                CARRO, contarVehiculos(registros, CARRO),
+                MOTO, contarVehiculos(registros, MOTO),
+                TOTAL_RECAUDADO, calcularTotalRecaudado(registros));
+    }
+
+    private static int contarVehiculos(List<Registro> registros, String tipoVehiculo) {
+        return (int) registros.stream()
+                .filter(registro -> registro.tipo().equals(tipoVehiculo))
+                .count();
+    }
+
+    private int calcularTotalRecaudado(List<Registro> registros) {
+        return registros.stream()
+                .mapToInt(registro -> calculadora.calcularTarifa(registro.minutos(), registro.tipo()))
+                .sum();
     }
 }
