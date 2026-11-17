@@ -17,4 +17,10 @@ class DescuentosTest {
     void clienteFrecuenteRecibeDiezPorCiento() {
         assertEquals(2700, descuentos.aplicarDescuento(3000, "frecuente"));
     }
+
+    @Test
+    @DisplayName("Un cliente de convenio recibe 20 % de descuento")
+    void clienteDeConvenioRecibeVeintePorCiento() {
+        assertEquals(20000, descuentos.aplicarDescuento(25000, "convenio"));
+    }
 }
