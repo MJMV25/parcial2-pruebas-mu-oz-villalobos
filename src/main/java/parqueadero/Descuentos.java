@@ -11,7 +11,7 @@ public class Descuentos {
         if (valor < 0) {
             throw new IllegalArgumentException("El valor no puede ser negativo");
         }
-        if (!PORCENTAJES.containsKey(tipoCliente)) {
+        if (tipoCliente == null || !PORCENTAJES.containsKey(tipoCliente)) {
             throw new IllegalArgumentException("Tipo de cliente no válido");
         }
         int porcentaje = PORCENTAJES.get(tipoCliente);
