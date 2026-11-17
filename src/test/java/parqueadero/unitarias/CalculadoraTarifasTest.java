@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import parqueadero.CalculadoraTarifas;
@@ -17,7 +17,7 @@ import parqueadero.CalculadoraTarifas;
  *
  * <p>Particiones de equivalencia:
  * <ul>
- *   <li>Tipo de vehículo: válido (carro, moto) e inválido (otro texto, vacío, mayúsculas).</li>
+ *   <li>Tipo de vehículo: válido (carro, moto) e inválido (otro texto, vacío, nulo, mayúsculas).</li>
  *   <li>Minutos: por debajo del rango (&lt; 0), gracia (0..15), cobro por hora (16..tope),
  *       tope diario (hasta 1440) y por encima del rango (&gt; 1440).</li>
  * </ul>
@@ -131,9 +131,9 @@ class CalculadoraTarifasTest {
     }
 
     @ParameterizedTest(name = "rechaza el tipo [{0}]")
-    @EmptySource
-    @DisplayName("Rechaza un tipo de vehículo vacío")
-    void rechazaTipoDeVehiculoVacio(String tipoVehiculo) {
+    @NullAndEmptySource
+    @DisplayName("Rechaza un tipo de vehículo vacío o nulo")
+    void rechazaTipoDeVehiculoVacioONulo(String tipoVehiculo) {
         IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
                 () -> calculadora.calcularTarifa(30, tipoVehiculo));
 

@@ -16,7 +16,7 @@ public class CalculadoraTarifas {
      * de hora según el tipo de vehículo, sin superar el tope diario.
      */
     public int calcularTarifa(int minutos, String tipoVehiculo) {
-        if (!TARIFA_POR_HORA.containsKey(tipoVehiculo)) {
+        if (!esTipoDeVehiculoValido(tipoVehiculo)) {
             throw new IllegalArgumentException("Tipo de vehículo no válido");
         }
         if (minutos < 0 || minutos > MINUTOS_MAXIMOS) {
@@ -30,5 +30,9 @@ public class CalculadoraTarifas {
         int horasCobradas = (minutos + 59) / 60;
         int valor = horasCobradas * TARIFA_POR_HORA.get(tipoVehiculo);
         return Math.min(valor, TOPE_DIARIO.get(tipoVehiculo));
+    }
+
+    private static boolean esTipoDeVehiculoValido(String tipoVehiculo) {
+        return tipoVehiculo != null && TARIFA_POR_HORA.containsKey(tipoVehiculo);
     }
 }
