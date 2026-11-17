@@ -9,6 +9,6 @@ public class Descuentos {
 
     public int aplicarDescuento(int valor, String tipoCliente) {
         int porcentaje = PORCENTAJES.get(tipoCliente);
-        return valor - valor * porcentaje / 100;
+        return valor * (100 - porcentaje) / 100;
     }
 }
